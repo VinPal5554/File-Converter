@@ -84,8 +84,11 @@ def handle_mp4_to_avi():
         messagebox.showerror("Error", "No file selected!")
         return
     try:
-        file_label.config(text="Converting to GIF...")
-        output = convert_mp4_to_avi(file_path, start=0, end=5, fps=10)
+        file_label.config(text="Converting to AVI...")
+
+        codec = codec_var.get()
+
+        output = convert_mp4_to_avi(file_path, start=0, end=5, fps=10, codec=codec)
         messagebox.showinfo("Success", f"Converted to {output}")
         file_label.config(text=f"Saved: {os.path.basename(output)}")
     except Exception as e:
@@ -98,7 +101,7 @@ def handle_avi_to_mp4():
         messagebox.showerror("Error", "No file selected!")
         return
     try:
-        file_label.config(text="Converting to GIF...")
+        file_label.config(text="Converting to MP4...")
         output = convert_avi_to_mp4(file_path, start=0, end=5, fps=10)
         messagebox.showinfo("Success", f"Converted to {output}")
         file_label.config(text=f"Saved: {os.path.basename(output)}")
@@ -125,6 +128,14 @@ convert_btn2.pack(pady=5)
 
 # Video Conversion Buttons
 tk.Label(root, text="Video Conversions", font=("Arial", 10, "bold")).pack()
+
+# Codec Selection Dropdown
+tk.Label(root, text="Select Codec", font=("Arial", 10)).pack()
+codec_var = tk.StringVar(value="mpeg4")  # default
+codec_options = ["mpeg4", "libx264", "png", "rawvideo"]
+codec_menu = tk.OptionMenu(root, codec_var, *codec_options)
+codec_menu.pack(pady=5)
+
 
 gif_convert_btn = tk.Button(root, text="Convert MP4 to GIF", command=lambda: run_in_thread(handle_mp4_to_gif))
 gif_convert_btn.pack(pady=5)

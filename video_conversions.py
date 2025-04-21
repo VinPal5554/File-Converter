@@ -21,14 +21,15 @@ def convert_gif_to_mp4(file_path):
     video.close()
     return output_file
 
-def convert_mp4_to_avi(file_path, start=None, end=None, fps=None):
+def convert_mp4_to_avi(file_path, codec="mpeg4", start=None, end=None, fps=None):
     if not file_path.lower().endswith(".mp4"):
         raise ValueError("Not an MP4 file")
     video = VideoFileClip(file_path)
     base, _ = os.path.splitext(file_path)
     output_file = base + ".avi"
-    video.write_videofile(output_file, codec="mpeg4")  # Or try codec='libx264'
+    video.write_videofile(output_file, codec=codec)  # Or try codec='libx264'
     video.close()
+    print("Mp4 converted to avi via codec: " + codec)
     return output_file
 
 def convert_avi_to_mp4(file_path, start=None, end=None, fps=None):
