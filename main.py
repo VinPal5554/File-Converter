@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import threading
 from image_conversions import convert_png_to_jpg, convert_jpg_to_png
-from video_conversions import convert_mp4_to_gif, convert_gif_to_mp4
+from video_conversions import convert_mp4_to_gif, convert_gif_to_mp4, convert_avi_to_mp4, convert_mp4_to_avi
 
 # Initialize Tkinter
 root = tk.Tk()
@@ -45,6 +45,9 @@ def handle_jpg_to_png():
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
+
+
+
 def handle_mp4_to_gif():
     global file_path
     if not file_path:
@@ -67,6 +70,36 @@ def handle_gif_to_mp4():
     try:
         file_label.config(text="Converting to MP4...")
         output = convert_gif_to_mp4(file_path)
+        messagebox.showinfo("Success", f"Converted to {output}")
+        file_label.config(text=f"Saved: {os.path.basename(output)}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+        file_label.config(text="Conversion failed")
+
+
+
+def handle_mp4_to_avi():
+    global file_path
+    if not file_path:
+        messagebox.showerror("Error", "No file selected!")
+        return
+    try:
+        file_label.config(text="Converting to GIF...")
+        output = convert_mp4_to_avi(file_path, start=0, end=5, fps=10)
+        messagebox.showinfo("Success", f"Converted to {output}")
+        file_label.config(text=f"Saved: {os.path.basename(output)}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+        file_label.config(text="Conversion failed")
+
+def handle_avi_to_mp4():
+    global file_path
+    if not file_path:
+        messagebox.showerror("Error", "No file selected!")
+        return
+    try:
+        file_label.config(text="Converting to GIF...")
+        output = convert_avi_to_mp4(file_path, start=0, end=5, fps=10)
         messagebox.showinfo("Success", f"Converted to {output}")
         file_label.config(text=f"Saved: {os.path.basename(output)}")
     except Exception as e:
@@ -98,6 +131,12 @@ gif_convert_btn.pack(pady=5)
 
 gif_to_mp4_btn = tk.Button(root, text="Convert GIF to MP4", command=lambda: run_in_thread(handle_gif_to_mp4))
 gif_to_mp4_btn.pack(pady=5)
+
+mp4_to_avi_btn = tk.Button(root, text="Convert MP4 to AVI", command=lambda: run_in_thread(handle_mp4_to_avi))
+mp4_to_avi_btn.pack(pady=5)
+
+avi_to_mp4_btn = tk.Button(root, text="Convert AVI to MP4", command=lambda: run_in_thread(handle_avi_to_mp4))
+avi_to_mp4_btn.pack(pady=5)
 
 # Run the Tkinter loop
 root.mainloop()
